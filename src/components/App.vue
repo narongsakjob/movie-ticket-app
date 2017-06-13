@@ -1,14 +1,24 @@
 <template>
   <div class="box">
-    <h3 class="title">App</h3>
-    <movie></movie>
+    <h3 class="title">App: {{movieId}}</h3>
+    <movie @chooseMovie="handleChooseMovie"></movie>
   </div>
 </template>
 <script>
 import Movie from 'Components/Movie.vue'
 
 export default {
-  components: { Movie }
+  components: { Movie },
+  data() {
+    return {
+      movieId: ''
+    }
+  },
+  methods: {
+    handleChooseMovie(movieId) {
+      this.movieId = movieId
+    }
+  }
 }
 
 </script>

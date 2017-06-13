@@ -2,7 +2,7 @@
     <div class="box">
         <div class="columns">
             <div v-for ="m in movies" class="column">
-                <figure class="image">
+                <figure class="image pointer" @click="chooseMovie(m.id)">
                     <img :src="imgSrc(m.id)">
                 </figure>
             </div>
@@ -21,7 +21,16 @@
         methods: {
             imgSrc(movieId) {
                 return `/movies/${ movieId }.jpg`
+            },
+            chooseMovie(movieId) {
+                this.$emit('chooseMovie',movieId)
             }
         }
     }
 </script>
+
+<style>
+    .pointer {
+        cursor: pointer;
+    }
+</style>
