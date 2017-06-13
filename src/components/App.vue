@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <h3 class="title">App: {{movieId}}</h3>
-    <movie @chooseMovie="handleChooseMovie"></movie>
+    <movie @chooseMovie="handleChooseMovie" :movieId="movieId"></movie>
   </div>
 </template>
 <script>
