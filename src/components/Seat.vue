@@ -15,14 +15,19 @@
 <script>
     import movie from 'Others/movie.json'
     export default {
-        props: [ 'movieId', 'selectSeats' ],
+        props: [ 'movieId', 'selectSeats', 'firebaseSeats' ],
         methods: {
             className(seat) {
                 const ids = this.selectSeats.map(s => s.id)
                 const idx = ids.indexOf(seat.id)
+                const firebaseIds = this.firebaseSeats.map(s => s.id)
+                const firebaseIdx = firebaseIds.indexOf(seat.id)
+                console.log(this.firebaseSeats.length)
                 return [
                     "button",
-                    { "is-danger": seat.seated, "is-primary": idx != -1 }
+                    {  "is-danger": seat.seated,
+                       "is-primary": idx != -1, 
+                       "is-warning": firebaseIdx != -1 && idx == -1 }
                 ]
             },
             chooseSeat(seat) {

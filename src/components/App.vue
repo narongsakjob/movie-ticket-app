@@ -7,6 +7,7 @@
     <seat :movieId="movieId" 
           @chooseSeat="handleChooseSeat" 
           :selectSeats="selectSeats"
+          :firebaseSeats="firebaseSeats"
     />
   </div>
 </template>
@@ -14,6 +15,8 @@
 import firebase from 'firebase'
 import Movie from 'Components/Movie.vue'
 import Seat from 'Components/Seat.vue'
+import { pushToArray } from 'Others/lib'
+import _ from 'lodash'
 
 const config = {
   databaseURL: "https://realtimedatabase-cb77e.firebaseio.com",
@@ -22,15 +25,13 @@ firebase.initializeApp(config)
 
 const db = firebase.database()
 
-const dbRef = db.ref()
-dbRef.set("xxx")
-
 export default {
   components: { Movie, Seat },
   data() {
     return {
       movieId: '',
       selectSeats: [],
+      firebaseSeats: [],
       status: { count: 0, price: 0 }
     }
   },
@@ -45,16 +46,23 @@ export default {
         }
       }
       this.movieId = movieId
+
+      const movieRef = db.ref('/').child(this.movieId)
+      movieRef.on('value', snapshot => {
+        const seats = snapshot.val()
+        this.firebaseSeats = []
+
+        _.forOwn(seats, s => {
+          pushToArray(s, this.firebaseSeats)
+        })
+      })
+
     },
     handleChooseSeat(seat) {
-      const ids = this.selectSeats.map(s => s.id)
-      const idx = ids.indexOf(seat.id)
 
-      if(idx === -1) {
-        this.selectSeats.push(seat)
-      }else {
-        this.selectSeats.splice(idx,1)
-      }
+      pushToArray(seat, this.selectSeats)
+      const movieRef = db.ref('/').child(this.movieId)
+      movieRef.push(seat)
 
       this.status = this.selectSeats.reduce((summary, s) => {
         summary.count++
