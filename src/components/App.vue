@@ -11,8 +11,19 @@
   </div>
 </template>
 <script>
+import firebase from 'firebase'
 import Movie from 'Components/Movie.vue'
 import Seat from 'Components/Seat.vue'
+
+const config = {
+  databaseURL: "https://realtimedatabase-cb77e.firebaseio.com",
+}
+firebase.initializeApp(config)
+
+const db = firebase.database()
+
+const dbRef = db.ref()
+dbRef.set("xxx")
 
 export default {
   components: { Movie, Seat },
